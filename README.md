@@ -93,6 +93,8 @@ Here are some of the commonly used commands you can run in the project. Run
 > **Note** On Windows, you need to enable symlinks
 > (`git config --global core.symlinks true`) and Developer Mode.
 
+GitHub Pages publication runs only in the upstream `google/comprehensive-rust` repository. Forks can build and test the course.
+
 ## Contributing
 
 We welcome contributions. Please see [CONTRIBUTING.md](CONTRIBUTING.md) for

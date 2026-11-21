@@ -42,9 +42,18 @@ export default class Playground {
    * generate a new mock for the playground that overrides playground requests
    */
   async mock_new() {
-    return browser.mock("https://play.rust-lang.org/execute", {
-      method: "post",
+    const endpoint = "https://play.rust-lang.org/execute";
+    const preflight = await browser.mock(endpoint, { method: "options" });
+    preflight.respond("", {
+      statusCode: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST",
+        "Access-Control-Allow-Headers": "content-type",
+      },
+      fetchResponse: false,
     });
+    return browser.mock(endpoint, { method: "post" });
   }
 
   /**
@@ -61,7 +70,6 @@ export default class Playground {
   async mock_success(stdout: string) {
     this.mock = await this.mock_new();
 
-    // be aware that there is a still a preflight OPTIONS request
     this.mock.respond(
       {
         success: true,
@@ -86,7 +94,6 @@ export default class Playground {
     // mock the response so this test does not rely on the playground backend to be working
     this.mock = await this.mock_new();
 
-    // be aware that there is a still a preflight OPTIONS request
     this.mock.respond(
       {
         success: false,
